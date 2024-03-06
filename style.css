@@ -52,36 +52,44 @@ body {
   font-style: normal;
 }
 
-.results, .paragraph, .picture, .picture1, .picture2, .picture3 {
+.results, .paragraph, .picture, .picture1, .picture2, .picture3, .chartSection, .results1, .option1, .option2, .option3 {
   background-color: #f2f2f2;
   padding: 10px;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.results1, .option1, .option2, .option3 {
+  margin-top: 10px;
+}
+.chartSection {
+  padding: 10px;
+  margin: 0 10px 10px 10px;
+  color: #ffffff;
+  border-radius: 10px;
+}
 .results {
   grid-area: 2 / 1 / 5 / 2;
   font-size: small;
 
 }
 
-.results h2 {
+.results .voting-outcome {
+  font-size: 18px;
+}
+
+ .results1 h2, .option1 h2, .option2 h2, .option3 h2 {
   font-size: 20px;
   font-weight: 700;
   text-align: center;
   vertical-align: middle;
-  background-color: #232f3e;
+  background-color: #FF9900;
   padding: 10px;
   margin: 10px;
   color: #ffffff;
   border-radius: 10px;
 
-
 }
-.results .voting-outcome {
-  font-size: 18px;
-}
-
 .paragraph {
   grid-area: 4 / 2 / 5 / 5;
   padding-top: 40px;
@@ -99,6 +107,7 @@ body {
 .picture1 { grid-area: 2 / 2 / 4 / 3; }
 .picture2 { grid-area: 2 / 3 / 4 / 4; }
 .picture3 { grid-area: 2 / 4 / 4 / 5; }
+
 
 .footer {
   grid-area: 5 / 1 / 6 / 5;
