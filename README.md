@@ -7,4 +7,6 @@ Repository for class 11 lab
 
 ### Lab 12 | 05 MAR 2024 | Tuesday
 
-![Lighthouse Score]()
+Add canvas.js chart and function that illustrates clicks and views
+
+![Lighthouse Score](../odd-duck/img/05MAR2024.png)
