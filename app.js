@@ -5,31 +5,32 @@ function Product(name, imagePath) {
   this.timesClicked = 0;
 }
 // define products with array, click rounds, and starting round
-let products = [];
+let products = JSON.parse(localStorage.getItem('products')) || [];
 let rounds = 25;
 let currentRound = 0;
 let lastShownIndices = [];
 
-products.push(new Product('Bag', 'img/bag.jpg'));
-products.push(new Product('Banana', 'img/banana.jpg'));
-products.push(new Product('Bathroom', 'img/bathroom.jpg'));
-products.push(new Product('Boots', 'img/boots.jpg'));
-products.push(new Product('Breakfast', 'img/breakfast.jpg'));
-products.push(new Product('Bubblegum', 'img/bubblegum.jpg'));
-products.push(new Product('Chair', 'img/chair.jpg'));
-products.push(new Product('Cthulhu', 'img/cthulhu.jpg'));
-products.push(new Product('Dog Duck', 'img/dog-duck.jpg'));
-products.push(new Product('Dragon Meat', 'img/dragon.jpg'));
-products.push(new Product('Pen', 'img/pen.jpg'));
-products.push(new Product('Pet Sweep', 'img/pet-sweep.jpg'));
-products.push(new Product('Scissors', 'img/scissors.jpg'));
-products.push(new Product('Shark', 'img/shark.jpg'));
-products.push(new Product('Sweep', 'img/sweep.png'));
-products.push(new Product('Tauntaun', 'img/tauntaun.jpg'));
-products.push(new Product('Unicorn Meat', 'img/unicorn.jpg'));
-products.push(new Product('Water Can', 'img/water-can.jpg'));
-products.push(new Product('Wine Glass', 'img/wine-glass.jpg'));
-
+if (products[0] === undefined) {
+  products.push(new Product('Bag', 'img/bag.jpg'));
+  products.push(new Product('Banana', 'img/banana.jpg'));
+  products.push(new Product('Bathroom', 'img/bathroom.jpg'));
+  products.push(new Product('Boots', 'img/boots.jpg'));
+  products.push(new Product('Breakfast', 'img/breakfast.jpg'));
+  products.push(new Product('Bubblegum', 'img/bubblegum.jpg'));
+  products.push(new Product('Chair', 'img/chair.jpg'));
+  products.push(new Product('Cthulhu', 'img/cthulhu.jpg'));
+  products.push(new Product('Dog Duck', 'img/dog-duck.jpg'));
+  products.push(new Product('Dragon Meat', 'img/dragon.jpg'));
+  products.push(new Product('Pen', 'img/pen.jpg'));
+  products.push(new Product('Pet Sweep', 'img/pet-sweep.jpg'));
+  products.push(new Product('Scissors', 'img/scissors.jpg'));
+  products.push(new Product('Shark', 'img/shark.jpg'));
+  products.push(new Product('Sweep', 'img/sweep.png'));
+  products.push(new Product('Tauntaun', 'img/tauntaun.jpg'));
+  products.push(new Product('Unicorn Meat', 'img/unicorn.jpg'));
+  products.push(new Product('Water Can', 'img/water-can.jpg'));
+  products.push(new Product('Wine Glass', 'img/wine-glass.jpg'));
+}
 
 function displayThreeProducts() {
   let displayIndexes = [];
@@ -42,7 +43,6 @@ function displayThreeProducts() {
     }
     attempts++;
   }
-
 
   if (displayIndexes.length === 3) {
     lastShownIndices = [...displayIndexes];
@@ -59,10 +59,9 @@ function displayThreeProducts() {
   }
 }
 
-
-
 function handleProductClick(index) {
   products[index].timesClicked++;
+  localStorage.setItem('products', JSON.stringify(products));
   currentRound++;
   if (currentRound < rounds) {
     displayThreeProducts();
