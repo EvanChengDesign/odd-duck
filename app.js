@@ -8,6 +8,7 @@ function Product(name, imagePath) {
 let products = [];
 let rounds = 25;
 let currentRound = 0;
+let lastShownIndices = [];
 
 products.push(new Product('Bag', 'img/bag.jpg'));
 products.push(new Product('Banana', 'img/banana.jpg'));
@@ -30,25 +31,36 @@ products.push(new Product('Water Can', 'img/water-can.jpg'));
 products.push(new Product('Wine Glass', 'img/wine-glass.jpg'));
 
 
-// function to display three product images
 function displayThreeProducts() {
   let displayIndexes = [];
-  while (displayIndexes.length < 3) {
+  let attempts = 0;
+  while (displayIndexes.length < 3 && attempts < 100) {
     let index = Math.floor(Math.random() * products.length);
-    if (!displayIndexes.includes(index)) {
+
+    if (!lastShownIndices.includes(index) && !displayIndexes.includes(index)) {
       displayIndexes.push(index);
     }
+    attempts++;
   }
 
-  const pictureElements = [document.querySelector('.picture1'), document.querySelector('.picture2'), document.querySelector('.picture3')];
-  displayIndexes.forEach((index, i) => {
-    pictureElements[i].innerHTML = `<img src="${products[index].imagePath}" alt="${products[index].name}" />`;
-    products[index].timesShown++;
-    pictureElements[i].onclick = () => handleProductClick(index);
-  });
+
+  if (displayIndexes.length === 3) {
+    lastShownIndices = [...displayIndexes];
+
+    displayIndexes.forEach((index, i) => {
+      const pictureElement = document.querySelector(`.picture${i + 1}`);
+      pictureElement.innerHTML = `<img src="${products[index].imagePath}" alt="${products[index].name}" />`;
+      products[index].timesShown++;
+
+      pictureElement.onclick = () => handleProductClick(index);
+    });
+  } else {
+    console.error('Failed');
+  }
 }
 
-// function to handle user click on product images
+
+
 function handleProductClick(index) {
   products[index].timesClicked++;
   currentRound++;
@@ -58,24 +70,60 @@ function handleProductClick(index) {
     endVotingSession();
   }
 }
-// function to terminate voting
+
 function endVotingSession() {
-  let pictureElements = document.querySelectorAll('.picture, .picture1, .picture2, .picture3');
-  pictureElements.forEach(el => el.onclick = null);
+  document.querySelectorAll('.picture1, .picture2, .picture3').forEach(el => {
+    el.innerHTML = ''; // Clear the images
+    el.onclick = null; // Remove click handlers
+  });
 
-  displayResults();
+  displayResults(); // Display the results with the chart
 }
-// function to display results
+
 function displayResults() {
-  const resultsElement = document.querySelector('.results');
-  resultsElement.innerHTML = products.map(product => `${product.name} had ${product.timesClicked} votes, and was seen ${product.timesShown} times.`).join('<br><br>');
+  // Assuming you've collected all the necessary data in products array
+  const ctx = document.getElementById('myChart').getContext('2d');
+  const labels = products.map(product => product.name);
+  const votesData = products.map(product => product.timesClicked);
+  const viewsData = products.map(product => product.timesShown);
+
+  if (window.myChart && typeof window.myChart.destroy === 'function') {
+    window.myChart.destroy();
+  }
 
 
-  let viewResultsBtn = document.createElement('button');
-  viewResultsBtn.textContent = 'View Results';
-  viewResultsBtn.onclick = () => alert(products.map(product => `${product.name} had ${product.timesClicked} votes, and was seen ${product.timesShown} times.`).join('\n'));
+  window.myChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: '# of Votes',
+        data: votesData,
+        backgroundColor: 'rgba(255, 153, 0, 0.2)',
+        borderColor: 'rgb(255, 153, 0)',
+        borderWidth: 1
+      }, {
+        label: '# of Views',
+        data: viewsData,
+        backgroundColor: 'rgba(20, 110, 180, 0.2)',
+        borderColor: 'rgb(20, 110, 180)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+
+  // Show the results section
+  document.querySelector('.results').style.display = 'block';
 }
-// event listener for DOM fully loading to show current results on button click
+
+
 document.addEventListener('DOMContentLoaded', () => {
   displayThreeProducts();
 
